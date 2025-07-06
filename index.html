@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>أداة حساب الرسوم الإدارية - مركز أيمز</title>
+  <style>
+    @font-face {
+      font-family: 'Almarai';
+      src: url('Almarai-Bold.ttf') format('truetype');
+    }
+
+    * {
+      font-family: 'Almarai', sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #183932;
+      padding: 2rem;
+      direction: rtl;
+      text-align: right;
+      color: #ffffff;
+    }
+
+    h1 {
+      color: #E56B54;
+      font-size: 2rem;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-family: 'Almarai', sans-serif;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #E56B54;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 5px;
+    }
+
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #ffffff;
+      color: #183932;
+      border-radius: 10px;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .logo img {
+      height: 80px;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 14px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="Aims Logo-FreeSample-Vectorizer-io.png" alt="شعار أيمز">
+  </div>
+
+  <h1>أداة حساب الرسوم الإدارية</h1>
+
+  <label>نوع المشروع:</label>
+  <select id="projectType">
+    <option value="short">قصير (نسبة مئوية)</option>
+    <option value="long">طويل (يومي)</option>
+  </select>
+
+  <div id="commonInputs">
+    <label id="costLabel">التكلفة المباشرة لتنفيذ البرنامج (بدون رسوم إدارية) - ريال:</label>
+    <input type="number" id="projectCost" />
+    <div class="note" id="costNote">مثال: أجور المدربين، المواد التدريبية، استئجار القاعة، الطباعة، الاستضافة التقنية.</div>
+  </div>
+
+  <div id="longInputs" style="display:none">
+    <label>رواتب الموظفين الإداريين (المحاسب، السكرتير، مدير المشروع):</label>
+    <input type="number" id="adminSalaries" />
+    <div class="note">المجموع السنوي لكل الرواتب</div>
+
+    <label>الإيجارات، الكهرباء، الإنترنت، الطباعة:</label>
+    <input type="number" id="officeExpenses" />
+    <div class="note">المجموع السنوي لكل هذه التكاليف</div>
+
+    <label>المعدات المكتبية والاستهلاك العام:</label>
+    <input type="number" id="equipmentCosts" />
+    <div class="note">المجموع السنوي (مثل الحبر، ورق، أجهزة صغيرة...)</div>
+
+    <label>رسوم البرامج (Zoom، Google Workspace، أنظمة محاسبة):</label>
+    <input type="number" id="softwareCosts" />
+    <div class="note">رسوم البرامج والأنظمة بالسنة</div>
+
+    <label>التكاليف القانونية والمحاسبية (محاسب قانوني، محامي):</label>
+    <input type="number" id="legalCosts" />
+    <div class="note">التكاليف السنوية للتدقيق والاستشارات</div>
+
+    <label>تسويق داخلي أو متابعة إدارية:</label>
+    <input type="number" id="marketingCosts" />
+    <div class="note">تكاليف الحملات أو الجهود التسويقية الإدارية سنويًا</div>
+
+    <label>أيام العمل لدى أيمز في السنة:</label>
+    <input type="number" id="workingDays" value="200" />
+    <div class="note">العدد الفعلي لأيام عمل المركز في السنة</div>
+
+    <label>عدد أيام المشروع:</label>
+    <input type="number" id="projectDays" />
+    <div class="note">مدة تنفيذ المشروع بالأيام</div>
+  </div>
+
+  <div id="shortInputs">
+    <label>
+      النسبة المئوية للرسوم الإدارية:
+      <span title="النسبة    متى تختارها؟
+5%    إذا كانت جهة التمويل لا تقبل نسبة كبيرة – أو أن المشروع قصير جدًا وبسيط
+10%    إذا كان المشروع صغير، وعدد المشاركين قليل، والمهام الإدارية قليلة
+15%    ✅ النسبة الشائعة – تفي بالتكاليف الإدارية للمشاريع المتوسطة
+20%    إذا كان هناك جهد إداري كبير رغم أن المشروع صغير (مثل التقارير، التنسيق، عدد كبير من المشاركين)
+25%    عندما تطلب الجهة تفاصيل وتدخل إداري كبير، أو إذا كانت النفقات العامة مرتفعة
+30%    نادرًا ما تستخدم – فقط إذا سمحت الجهة بذلك وكان المشروع يتطلب جهدًا إداريًا عاليًا وغير">ℹ️</span>
+    </label>
+    <select id="adminPercentage">
+      <option value="5">5%</option>
+      <option value="10">10%</option>
+      <option value="15" selected>15%</option>
+      <option value="20">20%</option>
+      <option value="25">25%</option>
+      <option value="30">30%</option>
+    </select>
+  </div>
+
+  <button onclick="calculate()">احسب</button>
+
+  <div class="result" id="result"></div>
+
+  <footer>
+    <p>Created by Dr. Hayan Saffan | AIME Training Center | Copy Rights 2025-2026</p>
+    <p class="note">ملاحظة: لا يُشترط إدخال عدد المشاريع في السنة، لأن الرسوم الإدارية تُحسب بناءً على عدد أيام العمل السنوية لدى المركز، وتوزيع التكاليف يتم على الأيام وليس على عدد المشاريع</p>
+  </footer>
+
+  <script>
+    const projectType = document.getElementById('projectType');
+    const longInputs = document.getElementById('longInputs');
+    const shortInputs = document.getElementById('shortInputs');
+    const commonInputs = document.getElementById('commonInputs');
+
+    projectType.addEventListener('change', () => {
+      if (projectType.value === 'long') {
+        longInputs.style.display = 'block';
+        shortInputs.style.display = 'none';
+        commonInputs.style.display = 'none';
+      } else {
+        longInputs.style.display = 'none';
+        shortInputs.style.display = 'block';
+        commonInputs.style.display = 'block';
+      }
+    });
+
+    function calculate() {
+      const type = projectType.value;
+      let resultText = '';
+
+      if (type === 'short') {
+        const cost = parseFloat(document.getElementById('projectCost').value);
+        const percent = parseFloat(document.getElementById('adminPercentage').value);
+        const adminFee = (cost * percent) / 100;
+        resultText = `الرسوم الإدارية (${percent}٪) = ${adminFee.toFixed(2)} ريال`;
+      } else {
+        const salaries = parseFloat(document.getElementById('adminSalaries').value);
+        const expenses = parseFloat(document.getElementById('officeExpenses').value);
+        const equipment = parseFloat(document.getElementById('equipmentCosts').value);
+        const software = parseFloat(document.getElementById('softwareCosts').value);
+        const legal = parseFloat(document.getElementById('legalCosts').value);
+        const marketing = parseFloat(document.getElementById('marketingCosts').value);
+        const daysPerYear = parseFloat(document.getElementById('workingDays').value);
+        const projectDays = parseFloat(document.getElementById('projectDays').value);
+
+        const totalAdminCosts = salaries + expenses + equipment + software + legal + marketing;
+        const dailyRate = totalAdminCosts / daysPerYear;
+        const totalAdminFee = dailyRate * projectDays;
+
+        resultText = `إجمالي التكاليف الإدارية السنوية: ${totalAdminCosts.toFixed(2)} ريال<br>` +
+                     `قيمة اليوم الإداري: ${dailyRate.toFixed(2)} ريال<br>` +
+                     `عدد أيام المشروع: ${projectDays} يوم<br>` +
+                     `الرسوم الإدارية = ${totalAdminFee.toFixed(2)} ريال`;
+      }
+
+      document.getElementById('result').innerHTML = resultText;
+    }
+  </script>
+</body>
+</html>
